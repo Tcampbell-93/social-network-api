@@ -4,8 +4,8 @@ const { User, Thought } = require('../models');
 module.exports = {
     async getThoughts(req, res) {
         try {
-        const thoughts = await Thought.find();
-        return res.json(thoughts);
+            const thoughts = await Thought.find();
+            return res.json(thoughts);
         } catch (err) {
             console.log(err);
             return res.status(500).json(err);
@@ -14,7 +14,8 @@ module.exports = {
 
     async createThought(req, res) {
         try {
-
+            const thought = await Thought.create(req.body);
+            res.json(thought);
         } catch (err) {
             console.log(err);
             return res.status(500).json(err);
@@ -23,7 +24,14 @@ module.exports = {
 
     async getSingleThought(req, res) {
         try {
-
+            const thought = await Thought.findOne({ _id: req.params.thoughtId })
+                .select('-__v');
+            
+            if (!thought) {
+                return res.status(404).json({ message: 'No thought with that id'});
+            }
+            
+            res.json(thought);
         } catch (err) {
             console.log(err);
             return res.status(500).json(err);
@@ -41,7 +49,19 @@ module.exports = {
 
     async deleteThought(req, res) {
         try {
+            const thought = await Thought.findOneAndRemove({ _id: req.params.thoughtId });
 
+            if (!thought) {
+                return res.status(404).json({ message: 'No thought with that id'});
+            }
+
+            const user = await User.findOneAndUpdate(
+                { thoughts: req.params.thoughtId },
+                { $pull: { thoughts: req.params.thoughtId }},
+                { new: true }
+            )
+
+            res.json({ message: 'Thought successfully deleted.'});
         } catch (err) {
             console.log(err);
             return res.status(500).json(err);
