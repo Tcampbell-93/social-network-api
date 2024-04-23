@@ -46,11 +46,13 @@ module.exports = {
                 { runValidators: true, new: true }
             )
 
+            console.log(thought);
+
             if (!thought) {
                 return res.status(404).json({ message: 'No thought with that id'});
             }
 
-            res.json(thought);
+            res.json({ message: 'Thought updated successfully.'});
         } catch (err) {
             console.log(err);
             return res.status(500).json(err);

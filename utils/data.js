@@ -72,12 +72,38 @@ const reactions = [
     "Coding is such an important skill to have."
 ];
 
-const user = [];
+const emails = [
+    'user123@example.com',
+    'john_doe@example.com',
+    'cool_guy@example.com',
+    'coding_master@example.com',
+    'user456@example.com',
+    'jane_smith@example.com',
+    'web_dev@example.com',
+    'username1@example.com',
+    'user007@example.com',
+    'newbie_coder@example.com',
+    'user789@example.com',
+    'js_ninja@example.com',
+    'code_lover@example.com',
+    'user42@example.com',
+    'design_guru@example.com',
+    'user999@example.com',
+    'web_designer@example.com',
+    'user555@example.com',
+    'dev_girl@example.com',
+    'username2@example.com',
+    'user2000@example.com',
+    'tech_savvy@example.com',
+    'user314@example.com',
+    'coder_life@example.com',
+    'user777@example.com'
+];
 
 const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const getRandomUsername = () => {
-    return getRandomArrItem(usernames);
+    return getRandomArrItem(usernames) || 'default_username';
 };
 
 const getRandomThoughts = (int) => {
@@ -100,7 +126,7 @@ const getRandomReactions = (int) => {
     for (let i = 0; i < int; i++) {
       results.push({
         reactionBody: getRandomArrItem(reactions),
-        username: this.username,
+        username: getRandomUsername(),
       });
     }
     return results;
@@ -111,6 +137,11 @@ const getRandomFriends = (int) => {
     for (let i = 0; i < int; i++) {
         results.push(getRandomArrItem(usernames));
     }
+    return results;
 }
 
-module.exports = { getRandomThoughts, getRandomUsername, getRandomFriends };
+const getRandomEmail = () => {
+    return getRandomArrItem(emails) || 'example@example.com';
+}
+
+module.exports = { getRandomThoughts, getRandomUsername, getRandomFriends, getRandomEmail };

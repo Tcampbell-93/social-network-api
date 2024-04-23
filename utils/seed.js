@@ -1,6 +1,6 @@
 const connection = require('../config/connection');
 const { User, Thought } = require('../models');
-const { getRandomThoughts, getRandomFriends, getRandomUsername } = require('./data');
+const { getRandomThoughts, getRandomFriends, getRandomUsername, getRandomEmail } = require('./data');
 
 // Connect to your MongoDB database
 connection.on('error', (err) => err);
@@ -22,19 +22,25 @@ connection.once('open', async () => {
   
     for (let i = 0; i < 5; i++) {
       users.push({
-        username: getRandomUsername,
-        email: 'example@example.com',
+        username: getRandomUsername(),
+        email: getRandomEmail(),
         thoughts: getRandomThoughts(3),
-        friends: getRandomFriends
+        friends: getRandomFriends(2)
       });
+    }
+
+    for (let user of users) {
+      const userThoughts = user.thoughts;
+      await Thought.insertMany(userThoughts);
     }
   
     await User.collection.insertMany(users);
-    await Thought.collection.insertMany({users: thoughts });
-  
+    
     // loop through the saved applications, for each application we need to generate a application response and insert the application responses
     console.table(users);
-    console.table(thoughts);
-    console.info('Seeding complete! 🌱');
+    users.forEach(user => {
+      console.table(user.thoughts);
+    });
+    console.info('Seeding complete!');
     process.exit(0);
 });
