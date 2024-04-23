@@ -15,7 +15,14 @@ module.exports = {
     async createThought(req, res) {
         try {
             const thought = await Thought.create(req.body);
-            res.json(thought);
+
+            const user = await User.findOneAndUpdate(
+                { _id: req.body },
+                { $push: { thoughts: req.params.thoughtId }},
+                { new: true }
+            )
+
+            res.json({ message: 'Thought created successfully.'});
         } catch (err) {
             console.log(err);
             return res.status(500).json(err);
@@ -46,8 +53,6 @@ module.exports = {
                 { runValidators: true, new: true }
             )
 
-            console.log(thought);
-
             if (!thought) {
                 return res.status(404).json({ message: 'No thought with that id'});
             }
@@ -61,7 +66,7 @@ module.exports = {
 
     async deleteThought(req, res) {
         try {
-            const thought = await Thought.findOneAndRemove({ _id: req.params.thoughtId });
+            const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
 
             if (!thought) {
                 return res.status(404).json({ message: 'No thought with that id'});
