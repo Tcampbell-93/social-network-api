@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const reactionSchema = require('./Reaction');
 
+// thought schema
 const thoughtSchema = new Schema(
     {
         thoughtText: {
@@ -26,10 +27,12 @@ const thoughtSchema = new Schema(
     }
 )
 
+// virtual for thoughtDate
 thoughtSchema.virtual('thoughtDate').get(function() {
     return this.createdAt.toISOString();
 });
 
+// virtual to count the reactions
 thoughtSchema.virtual('reactionCount').get(function() {
     return this.reactions.length;
 });

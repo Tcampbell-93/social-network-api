@@ -1,5 +1,6 @@
 const { Schema, model, Types } = require('mongoose');
 
+// reaction schema
 const reactionSchema = new Schema(
     {
         reactionId: {
@@ -28,6 +29,7 @@ const reactionSchema = new Schema(
     }
 )
 
+// virtual to get the reactionDate
 reactionSchema.virtual('reactionDate').get(function() {
     return this.createdAt.toISOString();
 });

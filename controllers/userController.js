@@ -4,6 +4,7 @@ const { User, Thought } = require('../models');
 
 module.exports = {
     async getUsers(req, res) {
+        // get all users
         try {
             const users = await User.find();
             return res.json(users);
@@ -13,6 +14,7 @@ module.exports = {
         }
     },
 
+    // create a user
     async createUser(req, res) {
         try {
             const user = await User.create(req.body);
@@ -23,11 +25,13 @@ module.exports = {
         }
     },
 
+    // get a single user
     async getSingleUser(req, res) {
         try {
             const user = await User.findOne({ _id: req.params.userId })
                 .select('-__v');
 
+            // if it does not exist send an error message
             if (!user) {
                 return res.status(404).json({ message: 'No user with that id'});
             }
@@ -39,6 +43,7 @@ module.exports = {
         }
     },
 
+    // update a user by id
     async updateUser(req, res) {
         try {
             const user = await User.findOneAndUpdate(
@@ -47,6 +52,7 @@ module.exports = {
                 { runValidators: true, new: true }
             )
 
+            // if it does not exist send an error message
             if (!user) {
                 return res.status(404).json({ message: 'No user found with that id.'});
             }
@@ -58,10 +64,12 @@ module.exports = {
         }
     },
 
+    // delete a user by their id
     async deleteUser(req, res) {
         try {
             const user = await User.findOneAndDelete({ _id: req.params.userId });
 
+            // if it does not exist send an error message
             if (!user) {
                 return res.status(404).json({ message: 'No user found with that id.'});
             }
@@ -74,6 +82,7 @@ module.exports = {
         }
     },
 
+    // add a friend to the friends array by their IDs'
     async addFriend(req, res) {
         try {
             const user = await User.findOneAndUpdate(
@@ -82,6 +91,7 @@ module.exports = {
                 { runValidators: true, new: true }
             )
 
+            // if it does not exist send an error message
             if (!user) {
                 return res.status(404).json({ message: 'No user found with that id.'});
             }
@@ -93,6 +103,7 @@ module.exports = {
         }
     },
 
+    // delete a friend from the friends array by their IDs'
     async deleteFriend(req, res) {
         try {
             const user = await User.findOneAndUpdate(
@@ -101,6 +112,7 @@ module.exports = {
                 { runValidators: true, new: true }
             )
 
+            // if it does not exist send an error message
             if (!user) {
                 return res.status(404).json({ message: 'No user found with that id.'});
             }
